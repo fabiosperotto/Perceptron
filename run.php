@@ -229,7 +229,9 @@ function testando($perceptrons, $dados, $totalColunas, $maximoImagens){
 		
 	}
 
-	
+	$acertosGlobal = 0;
+	$errosGlobal = 0;
+	$tentativasGlobal = 0;
 	for($i=0; $i < 10; $i++){
 		echo "\n Para o numero $i: \n";
 		echo "Acertos = ".$contagens[$i]['acertos']."  | Erros = ".$contagens[$i]['erros'];
@@ -237,7 +239,14 @@ function testando($perceptrons, $dados, $totalColunas, $maximoImagens){
 		if($somaDivisor == 0) $taxa = 0;
 		if($somaDivisor != 0) $taxa = ($contagens[$i]['acertos'] * 100) / $somaDivisor;
 		echo "\nAcertou %".round($taxa,2)." das vezes\n";
+		$acertosGlobal += $contagens[$i]['acertos'];
+		$errosGlobal += $contagens[$i]['erros'];
+		$tentativasGlobal += $acertosGlobal + $errosGlobal;
 	}
+
+
+	echo "\nAcertos global = ".round((($acertosGlobal / $maximoImagens)*100),2)."%\n";
+	echo "Erros global = ".round((($errosGlobal / $maximoImagens)*100),2)."%\n";
 
 	echo "\nFim dos testes!\n";
 	exit;
