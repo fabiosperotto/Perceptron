@@ -27,6 +27,15 @@ Testado somente em ambiente Linux.
 [![asciicast](https://asciinema.org/a/bpla466tn2d5n6wgf0tj7wjph.png)](https://asciinema.org/a/bpla466tn2d5n6wgf0tj7wjph)
 
 
+### Treinamento
+
+    Gera pesos randômicos para todos os neurônios (valores até um máximo de 0.4999...)
+    Para cada neurônio criado (10 Perceptrons)    
+        erro = alvo - saída do neurônio
+        Para todos os pesos i
+            peso[i] += taxa_aprendizado * erro * entrada[i]
+        Se (erro != desejado) somaErros++
+
 
 ### Testes
 Teste realizado após treinamento com 15 épocas/eras e 18 mil imagens (30 minutos):
