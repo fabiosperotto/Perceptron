@@ -8,7 +8,7 @@ use Neural\Data;
 
 //PRE-PROCESSAMENTO
 $data = new Data();
-$dados = $data->importData('mnist_train_normalized.csv');
+$dados = $data->importData('mnist_train.csv');
 $totalLinhas = count($dados);
 if($totalLinhas <= 0) die("\n Erro na importação\n");
 
@@ -72,6 +72,7 @@ function treinamento($perceptrons, $dados, $totalColunas, $linhasTreinamento, $e
 	$start_date = new DateTime(date('Y-m-d H:i:s'));
 
 	echo "\n Total de imagens maximas para treinamento: $linhasTreinamento \n";
+	$data = new Data();
 
 	//INICIO PROCESSAMENTO	
 
@@ -79,7 +80,7 @@ function treinamento($perceptrons, $dados, $totalColunas, $linhasTreinamento, $e
 	$epochs = 0;
 	while($epochs < $epocas){
 
-		echo "\n Treinamento na Epoca ".$epochs."\n";
+		echo "\n Treinamento na Epoca ".($epochs + 1)."\n";
 		$epochs++;
 		foreach ($perceptrons as $perceptron) {
 
@@ -94,6 +95,7 @@ function treinamento($perceptrons, $dados, $totalColunas, $linhasTreinamento, $e
 				unset($inputs[0]);
 				$inputs = array_values($inputs);
 				$target = ($numeroAlvo == $perceptron->getLabel())? 1 : 0;	//1 se target eh do neuronio respectivo
+				$inputs = $data->normalizeInput($inputs);
 				$perceptron->train($inputs, $target);
 				$teste++;
 				if($teste == $linhasTreinamento){ //testando com as primeiras x linhas
@@ -153,7 +155,8 @@ function testando($perceptrons, $dados, $totalColunas, $maximoImagens){
 	$labelMaior = null;
 	echo "\n\n Se imagem for de um 5:";
 	foreach ($perceptrons as $perceptron) {
-		$teste = $perceptron->test($linha1);
+		$inputs = $data->normalizeInput($linha1);		
+		$teste = $perceptron->test($inputs);
 		echo "\n Perceptron #".$perceptron->getLabel()." = ".$teste;	
 		
 		if($teste > $maior){
@@ -167,7 +170,8 @@ function testando($perceptrons, $dados, $totalColunas, $maximoImagens){
 	$maior = -9999.9999;
 	$labelMaior = null;
 	foreach ($perceptrons as $perceptron) {
-		$teste = $perceptron->test($linha3);
+		$inputs = $data->normalizeInput($linha1);
+		$teste = $perceptron->test($inputs);
 		echo "\n Perceptron #".$perceptron->getLabel()." = ".$teste;
 		
 		if($teste > $maior){
@@ -179,7 +183,7 @@ function testando($perceptrons, $dados, $totalColunas, $maximoImagens){
 	echo "\n Fim de exemplos de testes, testes reais a seguir, pressione enter para continuar: \n";
 	$press = readline();
 
-	$dados = $data->importData('mnist_test_normalized.csv');
+	$dados = $data->importData('mnist_test.csv');
 	$totalLinhas = count($dados);
 	if($totalLinhas <= 0) die("\n Erro na importação\n");
 
@@ -209,7 +213,8 @@ function testando($perceptrons, $dados, $totalColunas, $maximoImagens){
 		//echo "\nAlvo teste = $numeroAlvo \n";	
 		$inputs = explode(",", $dadosLinha);
 		unset($inputs[0]);
-		$inputs = array_values($inputs);		
+		$inputs = array_values($inputs);	
+		$inputs = $data->normalizeInput($inputs);	
 		$maior = -9999.9999;
 		$labelMaior = null;
 		foreach ($perceptrons as $perceptron) {

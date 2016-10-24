@@ -38,11 +38,29 @@ Testado somente em ambiente Linux.
 
 
 ### Testes
-Teste realizado após treinamento com 15 épocas/eras e 18 mil imagens (30 minutos):
+
+##Cenário 1
+Teste realizado após treinamento com 15 épocas/eras e 18 mil imagens (30 minutos), não utiliza bias nem função de ativação:
 
 ![Pre-Testes](public/pre-test.png "Inicio Testes")
 
 ![Testes](public/testes.png "Testes")
+
+
+##Cenário 2
+Teste realizado após treinamento com 15 épocas/eras e 60 mil imagens (103 minutos), com bias e usa função de ativação sigmoide:
+
+![Pre-Testes](public/pre-teste2.png "Inicio Testes 2")
+
+![Testes](public/testes2.png "Testes")
+
+
+##Cenário 3
+Teste realizado após treinamento com 15 épocas/eras e 60 mil imagens (118 minutos), com bias, usa função de ativação sigmoide mas normaliza as entradas de dados dividindo o pixel por 255:
+
+![Pre-Testes](public/pre-teste3.png "Inicio Testes 3")
+
+![Testes](public/testes3.png "Testes")
 
 
 

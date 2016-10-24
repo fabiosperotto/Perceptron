@@ -40,7 +40,9 @@ class Perceptron
 
         for ($i = 0; $i < $this->vectorLength; $i++) {            
             $this->weightVector[$i] = mt_rand()/getrandmax() * 0.2;
-        }        
+        } 
+        $this->weightVector[] = $this->bias; //acompanhar bias
+        $this->vectorLength++; //acompanhar bias
     }
 
     public function setLabel($l)
@@ -83,10 +85,11 @@ class Perceptron
      */
     public function setWeightVector($weightVector)
     {
-        if (!is_array($weightVector) || count($weightVector) != $this->vectorLength) {
+        if (!is_array($weightVector)) {
             throw new \InvalidArgumentException();
         }
-        $this->weightVector = $weightVector;        
+        $this->weightVector = $weightVector; 
+        $this->weightVector[] = $this->bias;       
     }
 
     /**
@@ -153,14 +156,12 @@ class Perceptron
      */    
     public function test($inputVector)
     {
-        if (!is_array($inputVector) || count($inputVector) != $this->vectorLength) {
+        if (!is_array($inputVector)) {
             throw new \InvalidArgumentException();
-        }
-        
+        }        
         $testResult = $this->dotProduct($this->weightVector, $inputVector);
         //$this->output = $testResult > 0 ? 1 : -1;
-        //$this->output = $this->sigmoid($testResult);
-        $this->output = $testResult / $this->vectorLength;
+        $this->output = $this->sigmoid($testResult / $this->vectorLength);
         return $this->output;
     }
 
@@ -176,18 +177,23 @@ class Perceptron
             throw new \InvalidArgumentException();
         }
       
+        $inputVector[] = 1;
         $this->iterations += 1;
 
-        $output = $this->test($inputVector);
+        $this->test($inputVector);     
         $error = $this->getCellError($outcome);        
 
 		
-		for ($i = 0; $i < $this->vectorLength; $i++) {
-		 	$this->weightVector[$i] += $this->learningRate * $error * $inputVector[$i];
-			
-	    }
 		
-	    if($error != $outcome) $this->errorSum++;        
+
+	    if($error != $outcome){
+
+            for ($i = 0; $i < $this->vectorLength; $i++) {
+                $this->weightVector[$i] += $this->learningRate * $error * $inputVector[$i];
+            
+            }     
+            $this->errorSum++;   
+        }
     }
 
 
@@ -223,23 +229,6 @@ class Perceptron
     private function sigmoid($t)
     {		
 		return (float) 1. / (1. + pow(M_E, -$t));
-	}
-
-
-
-	/**
-	 * Normalize inputs to generate values between 0 and 1. Pixel 255 = 1.
-	 * This cannot be necessary, analyses your problem. Even if you want, 
-	 * less proccess is used if you normalize your data file.
-	 * @param array $inputVector 
-	 * @return array
-	 */
-	private function normalizeInput($inputVector)
-	{
-		foreach ($inputVector as $key => $value) {			
-			$inputVector[$key] = $value / 1000;
-		}		
-		return $inputVector;
-	}
+	}	
 
 }

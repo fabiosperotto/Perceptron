@@ -63,4 +63,21 @@ class Data
 		return $json;
 	}
 
+
+
+	/**
+	 * Normalize inputs to generate values between 0 and 1. Pixel 255 = 1.
+	 * This cannot be necessary, analyses your problem. Even if you want, 
+	 * less proccess is used if you normalize your data file.
+	 * @param array $inputVector 
+	 * @return array
+	 */
+	public function normalizeInput($inputVector)
+	{
+		foreach ($inputVector as $key => $value) {        
+			$inputVector[$key] = $value / 255;
+		}		
+		return $inputVector;
+	}
+
 }
